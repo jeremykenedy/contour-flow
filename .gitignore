@@ -1,0 +1,15 @@
+build/
+device-state.json
+device-states/
+__pycache__/
+.DS_Store
+*.jks
+*.keystore
+*.pass
+.env
+.verity/*
+!.verity/standard.yaml
+.coverage
+coverage.xml
+coverage/.gradle/
+.ruff_cache/

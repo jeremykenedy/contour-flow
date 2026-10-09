@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.jeremykenedy.contourflow">
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <application android:label="Contour Flow" android:allowBackup="false" android:usesCleartextTraffic="false"
+        android:hardwareAccelerated="true" android:icon="@drawable/icon" android:banner="@drawable/banner"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity android:name=".ContourFlowActivity" android:exported="true" android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SettingsActivity" android:exported="true" android:screenOrientation="landscape" />
+        <activity android:name=".PreviewActivity" android:exported="false" android:screenOrientation="landscape" />
+        <service android:name=".ContourFlowDreamService" android:label="Contour Flow" android:exported="true"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.service.dream" android:resource="@xml/dream" />
+        </service>
+        <provider android:name=".ContourFlowSettingsProvider" android:authorities="com.jeremykenedy.contourflow.settings"
+            android:exported="true" android:grantUriPermissions="false" />
+    </application>
+</manifest>

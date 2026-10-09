@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" role="img" aria-labelledby="title desc">
+  <title id="title">Contour Flow</title>
+  <desc id="desc">Animated topographic contour lines. No ads, tracking, analytics, or network access.</desc>
+  <rect width="800" height="200" rx="16" fill="#fff" stroke="#e5e7eb"/>
+  <text x="40" y="80" fill="#0f172a" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="40" font-weight="700" letter-spacing="-.5">Contour Flow</text>
+  <text x="42" y="108" fill="#64748b" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="14">Animated topographic relief. No tracking or analytics of any kind.</text>
+  <g font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="500" text-anchor="middle">
+    <rect x="40" y="128" width="78" height="22" rx="11" fill="#f5f3f3" stroke="#d6d3d1" stroke-width=".8"/><text x="79" y="143" fill="#44403c">Animated</text>
+    <rect x="126" y="128" width="72" height="22" rx="11" fill="#eff6ff" stroke="#93c5fd" stroke-width=".8"/><text x="162" y="143" fill="#1e40af">Offline</text>
+    <rect x="206" y="128" width="91" height="22" rx="11" fill="#f0fdf4" stroke="#86efac" stroke-width=".8"/><text x="251" y="143" fill="#166534">No tracking</text>
+    <rect x="305" y="128" width="108" height="22" rx="11" fill="#fffbeb" stroke="#fcd34d" stroke-width=".8"/><text x="359" y="143" fill="#b45309">No analytics</text>
+  </g>
+  <g transform="translate(548 42)" fill="none" stroke-linecap="round">
+    <path d="M-12 26 C18 5 39 46 68 25 S119 4 148 25 S200 47 231 22" stroke="#1b7689" stroke-width="3"/>
+    <path d="M-12 44 C18 19 43 63 74 43 S124 20 155 43 S203 63 232 40" stroke="#2d9aac" stroke-width="2.5"/>
+    <path d="M-11 63 C21 34 48 82 80 62 S130 39 161 63 S207 84 233 59" stroke="#42c2c0" stroke-width="2"/>
+    <path d="M-10 83 C23 53 52 102 85 81 S135 58 167 82 S211 104 234 78" stroke="#65d9ca" stroke-width="1.8"/>
+    <path d="M-8 103 C25 72 57 121 90 100 S140 77 172 101 S215 123 235 97" stroke="#42c2c0" stroke-width="2"/>
+    <path d="M-5 122 C29 91 62 139 95 119 S147 96 179 120 S219 141 238 116" stroke="#2d9aac" stroke-width="2.4"/>
+  </g>
+</svg>

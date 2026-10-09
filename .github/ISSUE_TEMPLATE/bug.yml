@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible issue with Contour Flow.
+title: "Bug: "
+labels: [bug]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device model
+      placeholder: Manufacturer and model
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS and Android API
+      placeholder: Fire OS or Android TV version and API level
+    validations:
+      required: true
+  - type: input
+    id: resolution
+    attributes:
+      label: Display resolution
+      placeholder: 1920 x 1080
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps and observed result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
