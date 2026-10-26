@@ -12,6 +12,7 @@ android {
     sourceSets {
         main { manifest.srcFile '../build/coverage/AndroidManifest.xml'; java.srcDirs = ['../src']; res.srcDirs = ['../res'] }
         test.java.srcDirs = ['../tests']
+        test.java.exclude 'frame-support/**', 'ContourFlowFrameTest.java'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
     testOptions {

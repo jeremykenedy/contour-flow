@@ -54,3 +54,27 @@ the production shader band function for stable pixel half-width across slopes,
 finite/invisible flat terrain and effective line-weight changes. This is a CPU
 math reference, not a shader compiler or native-render test. Candidate 3 still
 needs a new native grant and actual flat-Coast review. Candidate 2 stays frozen.
+
+## Physical candidate 3 and scheduling experiment 4
+
+The original API30 Fire TV rendered the candidate 3 default at an actual
+1920x1080 buffer, but three quiet presentation rings measured about19.63–19.69
+FPS with median50ms intervals. The test stopped before the planned Contour
+idle-Dream gate. All60 prior APKs except the intended Contour upgrade, UI51,
+OS19 plus full OS settings, providers, external bytes, appops, actual two
+accessibility bindings and guard were preserved; Aerial/Main/Awake restored.
+
+Candidate 4 isolates scheduling only. Its shader, renderer, art, options and
+native-size behavior are byte-identical to candidate 3. A Choreographer callback
+submits the supplied vsync timestamp and requests a frame while visible; it
+removes the callback on stop/detach. The existing elapsed scene clock still
+retains paused progress and does not catch up offscreen. It does not introduce
+a frame-rate claim: the physical comparison must establish whether scheduling
+or another rendering cost caused the slow presentation.
+
+A host-only boundary fixture compiles the actual SceneView against minimal
+Android scheduler/GL-view stubs and observes duplicate start, visible-vsync
+requests, late callbacks after stop, elapsed resume behavior and detach cleanup.
+Those test-only classes are excluded from Android/Robolectric test compilation;
+they neither create a GL context nor establish device performance. Candidate 4
+is not published and has no native evidence yet.

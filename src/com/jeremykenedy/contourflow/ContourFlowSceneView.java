@@ -2,25 +2,14 @@ package com.jeremykenedy.contourflow;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.os.Handler;
-import android.os.Looper;
+import android.view.Choreographer;
 
-final class ContourFlowSceneView extends GLSurfaceView {
-    private final Handler handler = new Handler(Looper.getMainLooper());
+final class ContourFlowSceneView extends GLSurfaceView implements Choreographer.FrameCallback {
+    private final Choreographer choreographer = Choreographer.getInstance();
     private final ContourFlowMotion motion = new ContourFlowMotion();
     private final ContourFlowRenderer scene;
     private ContourFlowOptions options;
     private boolean running;
-    private final Runnable frame =
-            new Runnable() {
-                @Override
-                public void run() {
-                    if (!running) return;
-                    scene.phase = motion.advance(System.nanoTime(), options.speed);
-                    requestRender();
-                    handler.postDelayed(this, 33);
-                }
-            };
 
     ContourFlowSceneView(Context context, ContourFlowOptions options) {
         super(context);
@@ -44,15 +33,23 @@ final class ContourFlowSceneView extends GLSurfaceView {
         running = true;
         motion.start();
         onResume();
-        handler.post(frame);
+        choreographer.postFrameCallback(this);
     }
 
     void stopAnimation() {
         if (!running) return;
         running = false;
         motion.stop();
-        handler.removeCallbacks(frame);
+        choreographer.removeFrameCallback(this);
         onPause();
+    }
+
+    @Override
+    public void doFrame(long frameTimeNanos) {
+        if (!running) return;
+        scene.phase = motion.advance(frameTimeNanos, options.speed);
+        requestRender();
+        choreographer.postFrameCallback(this);
     }
 
     @Override
