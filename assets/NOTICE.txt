@@ -1,0 +1,7 @@
+Contour Flow
+Copyright 2026 Jeremy Kenedy
+
+This distribution contains original Contour Flow application code and
+artwork. No third-party media, fonts, or application libraries are bundled.
+
+Licensed under the Apache License, Version 2.0. See LICENSE for the full text.

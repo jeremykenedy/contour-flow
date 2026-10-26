@@ -1,23 +1,29 @@
 # Verification
 
-Local checks:
+Run the required local checks before release:
 
 ```bash
 ./test.sh
 bash scripts/test-coverage.sh
 python3 scripts/check-docs.py
 bash scripts/check-secrets.sh
-PATH="$(pwd)/build/coverage/python/bin:$PATH" bash scripts/check-style.sh
+bash scripts/check-style.sh
 ./build.sh --unsigned
 ./build.sh
 ```
 
-The tests cover installer behavior, settings validation and persistence, randomization, the provider schema, and relief-field bounds, shape variation, and contour interpolation. Coverage measures project-owned options, field math, preference, provider, and installer logic. The Android Canvas renderer and framework lifecycle are verified on an emulator and are excluded from JVM logic coverage.
+Behavior tests exercise installer rollback, seven-option validation and persistence, randomization, provider schema, elapsed scene-clock lifecycle, flat-gradient width limits, mesh interpolation and index coverage. The host SceneView fixture observes actual start/stop/detach scheduling against test-only Android stubs. These checks do not compile a GPU shader or establish visual quality.
 
-| Device | OS/API | Resolution | Result |
+## Native evidence
+
+| Target | Build | Observed result | Remaining limit |
 |---|---|---|---|
-| Google TV emulator `aql-googletv34` | Android 14, API 34 | 1920 x 1080 | Signed APK installed. Full-screen preview opened by D-pad Select after launch focus was verified. Palette changed through settings by D-pad. Glacier and Day scene capture inspected after 45 seconds; scene pixels changed between captures. DreamService selection/idle activation was not tested. |
-| Fire TV hardware | Untested | Not recorded | Looking for a Fire TV owner to test selection, idle startup, remote settings, and exit. Please report model, Fire OS/API, resolution, behavior, and results through Issues. |
-| Android TV hardware | Untested | Not recorded | Looking for an Android TV owner to test selection, idle startup, remote settings, and exit. Please report model, OS/API, resolution, behavior, and results through Issues. |
-| Google TV hardware | Untested | Not recorded | Looking for a Google TV owner to test selection, idle startup, remote settings, and exit. Please report model, OS/API, resolution, behavior, and results through Issues. |
-| Native 4K and sustained thermals | Untested | Not recorded | Requires a physical 4K television. |
+| API 34 Android TV emulator, native 1920 x 1080 | Candidate 5 | Native GLES preview, seven remote settings, motion and pause/recreation checks | Hardware pacing is separate |
+| Original Fire TV, API 30, native 1920 x 1080 | Candidate 5 | Three quiet compositor windows: 32.894155, 32.774628 and 32.774952 FPS; default and Coast weight contrasts inspected | Physical Contour normal-idle startup and sustained thermal behavior were not tested |
+| Release package | Code 6 | Core runtime equivalence is checked against code 5; packaging gate recorded separately | Do not infer a new renderer-performance result from package equivalence |
+
+Earlier candidates 3 and 4 remained near 20 FPS on this Fire TV and are not the release-performance evidence. Native recordings can lose encoded frames; only the separate quiet presentation windows support the pacing figures above. See [animation development](ANIMATION_REWORK.md).
+
+## Additional device reports
+
+A Fire TV owner, Android TV owner or Google TV owner testing another model should report the model, OS/API, actual surface resolution, settings, motion, normal-idle binding, exit behavior and results through the repository's Issues page. Native 4K output and sustained thermal behavior remain unverified.

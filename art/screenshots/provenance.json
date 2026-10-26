@@ -1,0 +1,38 @@
+{
+  "captures": [
+    {
+      "file": "art/screenshots/contour-default-api30.png",
+      "sha256": "338e0e9799cb120a28f59aad44c63e94b1ae140fb8c3ae1686033156986b1caf",
+      "bytes": 679537,
+      "sourceBuildCode": 5,
+      "device": "API 30 physical Fire TV",
+      "settings": "Default Abyss/Ridges",
+      "transformation": "None; raw native capture"
+    },
+    {
+      "file": "art/screenshots/contour-coast-api30.png",
+      "sha256": "c9c610330264195418b9d7fe598446a51009eaa61d50bc1fe64ea118dc4b5e51",
+      "bytes": 581377,
+      "sourceBuildCode": 5,
+      "device": "API 30 physical Fire TV",
+      "settings": "Sandstone/Coast, weight 4",
+      "transformation": "None; raw native capture"
+    },
+    {
+      "file": "art/screenshots/contour-settings-api34.png",
+      "sha256": "d9fa461e77c3c995f9ab06e7dfe2f6a2828b0858230db591c2a3630683df0c65",
+      "bytes": 87601,
+      "sourceBuildCode": 5,
+      "device": "API 34 Android TV emulator",
+      "settings": "Seven settings before code 6 credits entry",
+      "transformation": "None; raw native capture"
+    },
+    {
+      "file": "art/screensaver-preview.jpg",
+      "sha256": "1d3a1e249bb2702478390b079168db4179d9088ffa4ac1fb8c69c275300af420",
+      "derivedFrom": "art/screenshots/contour-default-api30.png",
+      "transformation": "Lanczos resize to 384x216, JPEG quality 95; no scene edits"
+    }
+  ],
+  "qualification": "Code 5 native scene captures; code 6 preserves core renderer classes. Code 6 Settings/Credits capture is a separate final packaging gate."
+}

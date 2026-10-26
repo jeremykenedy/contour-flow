@@ -78,3 +78,12 @@ requests, late callbacks after stop, elapsed resume behavior and detach cleanup.
 Those test-only classes are excluded from Android/Robolectric test compilation;
 they neither create a GL context nor establish device performance. Candidate 4
 is not published and has no native evidence yet.
+
+
+## Physical scheduling result and field candidate 5
+
+Candidate 4 remained near 19.63 FPS on the original API 30 Fire TV. Scheduling alone did not resolve the observed presentation limit. Candidate 5 moved smooth field and analytic-gradient evaluation to a dense 256 by 144 vertex mesh when fragment precision is at least 23 bits. A correction term retains subpixel contour accuracy between vertices; lower-precision drivers retain fragment evaluation. Full native surface size, line antialiasing, seven choices and scene design remain intact.
+
+The actual 1920 x 1080 candidate 5 surface measured 32.894155, 32.774628 and 32.774952 FPS in three separate quiet compositor windows. Median frame intervals were about 33.32 ms. These are observed presentation results on one Fire TV, not universal performance or sustained thermal claims. Default and Sandstone/Coast weight contrasts were inspected. The requested 20-second recording encoded only 17.988833 seconds and 117 frames, so its encoded frame rate is not used as renderer pacing evidence.
+
+Code 6 is release packaging of candidate 5. The renderer, field mesh, motion, options, provider, Dream and Preview classes are preserved. Only the settings credits entry, bundled notices, native-derived preview resource and version metadata change. Code 6 still requires its own packaging gate before publication; source equivalence does not replace that check.

@@ -1,9 +1,9 @@
 # Architecture
 
-Contour Flow is a native Android app with no runtime libraries. `ContourFlowDreamService` creates the animated `ContourFlowSceneView` when Android starts the screensaver. The view samples a low-resolution scalar relief field, traces its contour crossings, and draws the resulting paths with Android Canvas at the size supplied by the system.
+Contour Flow is an offline Android DreamService with no runtime libraries. The DreamService and exported PreviewActivity share the same GLES 2 SceneView. Choreographer schedules frames only while visible. Its elapsed clock preserves paused progress and removes callbacks on stop and detach.
 
-The relief field shifts slowly over time. Frame callbacks run only while the preview or dream is visible and stop when the activity pauses or the dream stops. Density controls contour levels and speed controls field movement. No text or symbols are drawn in the screensaver scene.
+The relief field evolves continuously. On fragment drivers with at least 23 precision bits, a 256 by 144 vertex grid evaluates smooth height and analytic gradients, then interpolates those values for full-surface contour shading. Other drivers use the original fragment evaluation path. Both paths use the Android-provided surface size, analytic line antialiasing and a flat-gradient fade. There is no reduced-resolution render target or photographic backdrop.
 
-`ContourFlowOptions` validates choices and resolves random values once per session. `ContourFlowPreferences` stores user choices locally. `ContourFlowSettingsProvider` publishes the documented schema for host apps. The settings activity supports D-pad navigation.
+Options, preferences and the versioned settings provider retain all seven keys, choices, random flags and defaults. The package and signer remain compatible with the original release. Settings has an offline Credits and licenses screen. It reads bundled project notices and Apache license text; it does not alter the scene or contact a server.
 
-The DreamService component is `com.jeremykenedy.contourflow/.ContourFlowDreamService`. The manifest includes the DreamService bind permission, action, metadata and preview resource. The app does not request Internet access.
+Code 6 packages the verified code 5 scene with a native-derived preview resource and credits. Settings changes for that entry are reported separately from the unchanged scene classes. Exact build comparison and native package checks are recorded before publication.

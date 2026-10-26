@@ -1,9 +1,6 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="art/banner-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="art/banner-light.svg">
-    <img src="art/banner-light.svg" alt="Contour Flow" width="800">
-  </picture>
+  <a href="https://github.com/jeremykenedy/contour-flow#gh-light-mode-only"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="art/banner-mobile-still-light.73a6d15f0630.svg"><source media="(prefers-reduced-motion: reduce)" srcset="art/banner-still-light.65bfbcddc376.svg"><source media="(max-width: 600px)" srcset="art/banner-mobile-light.66f89e0b9682.svg"><img src="art/banner-light.7398415ce781.svg#gh-light-mode-only" alt="Contour Flow" width="800"></picture></a>
+  <a href="https://github.com/jeremykenedy/contour-flow#gh-dark-mode-only"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="art/banner-mobile-still-dark.ce60a2688cd0.svg"><source media="(prefers-reduced-motion: reduce)" srcset="art/banner-still-dark.804b53dc973d.svg"><source media="(max-width: 600px)" srcset="art/banner-mobile-dark.2c2f5ae8c069.svg"><img src="art/banner-dark.f9833250327d.svg#gh-dark-mode-only" alt="Contour Flow" width="800"></picture></a>
 </p>
 
 <p align="center">Animated topographic contour lines for Fire TV, Android TV, and Google TV.</p>
@@ -12,6 +9,9 @@
   <a href="https://github.com/jeremykenedy/contour-flow/releases"><img src="https://img.shields.io/github/v/release/jeremykenedy/contour-flow?display_name=tag&amp;label=release" alt="Latest release"></a>
   <a href="https://github.com/jeremykenedy/contour-flow/releases"><img src="https://img.shields.io/github/downloads/jeremykenedy/contour-flow/total?label=downloads" alt="Downloads"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache License 2.0"></a>
+</p>
+
+<p align="center">
   <a href="https://github.com/jeremykenedy/contour-flow/stargazers"><img src="https://img.shields.io/github/stars/jeremykenedy/contour-flow?style=social" alt="Star this repository"></a>
   <a href="https://github.com/jeremykenedy"><img src="https://img.shields.io/github/followers/jeremykenedy?label=follow&amp;style=social" alt="Follow jeremykenedy on GitHub"></a>
   <a href="https://github.com/sponsors/jeremykenedy"><img src="https://img.shields.io/badge/sponsor-jeremykenedy-ea4aaa?logo=githubsponsors" alt="Sponsor jeremykenedy"></a>
@@ -29,7 +29,6 @@
 - [Device support](#device-support)
 - [Build and tests](#build-and-tests)
 - [Documentation](#documentation)
-- [Credits](#credits)
 - [License](#license)
 
 ## Overview
@@ -40,24 +39,19 @@ Show some love by starring this repository on GitHub.
 
 ## Screenshots
 
-Captured from the running Contour Flow preview on a Google TV API 34 emulator at 1920 x 1080, after a 45-second settling period. The scene uses Glacier palette and Day lighting. The second image shows the remote-operated settings screen.
+The release renderer is shown below in an unmodified code 5 native Fire TV capture at 1920 x 1080. Code 6 preserves that scene and adds release packaging. See [the gallery and provenance](docs/ARTWORK.md) for settings, version and device details.
 
-<p align="center">
-  <a href="docs/screenshots/contour-flow-google-tv-api34-1920x1080.png"><img src="docs/screenshots/contour-flow-google-tv-api34-1920x1080.png" alt="Topographic contour lines in Glacier palette and Day lighting on a Google TV emulator" width="800"></a>
-</p>
-
-<p align="center">
-  <a href="docs/screenshots/contour-flow-settings-google-tv-api34-1920x1080.png"><img src="docs/screenshots/contour-flow-settings-google-tv-api34-1920x1080.png" alt="Remote-operated Contour Flow settings on a Google TV emulator" width="800"></a>
-</p>
+<p align="center"><a href="art/screenshots/contour-default-api30.png"><img src="art/screenshots/contour-default-api30.png" alt="Animated Abyss contour ridges on the native Android TV surface" width="800"></a></p>
 
 ## Features and settings
 
-- Continuously animated contour fields with three relief shapes: ridges, basins, and coast.
-- Four palettes: Abyss, Slate, Sandstone, and Glacier.
-- Adjustable contour density, drift speed, line weight, lighting, and brightness.
-- Set each supported option to Random, or randomize all options when a session starts.
-- Remote-friendly settings and a versioned app-owned settings provider.
-- Canvas rendering at the display size supplied by Android. The app does not force a 4K surface.
+| Feature | What it does | Guide |
+|---|---|---|
+| Moving relief | Continuous ridges, basins and coastal contours at the supplied display size | [Architecture](docs/ARCHITECTURE.md) |
+| Seven controls | Palette, relief, density, speed, line weight, lighting and brightness | [Configuration](docs/CONFIGURATION.md) |
+| Random choices | Randomize supported settings when a new scene starts | [Configuration](docs/CONFIGURATION.md) |
+| Remote controls | Full-screen preview, D-pad settings and offline credits | [Installation](docs/INSTALLATION.md) |
+| Host integration | Stable settings provider and compatible upgrades | [Integrations](docs/INTEGRATIONS.md) |
 
 ## Requirements
 
@@ -90,22 +84,14 @@ You can also install the APK with the TV's package installer, preview it from th
 
 ## Fire TV Toolkit
 
-[Fire TV Toolkit](https://github.com/jeremykenedy/fire-tv-toolkit) offers a guided terminal installer for catalogued screensavers and tools for managing screensaver selection, timers, and supported device safeguards. Install it from a fresh checkout:
-
-```bash
-git clone https://github.com/jeremykenedy/fire-tv-toolkit.git
-cd fire-tv-toolkit
-node setup.js
-```
-
-After Contour Flow is added to the Toolkit catalog, install it and select it with:
+Install the catalogued app with [Fire TV Toolkit](https://github.com/jeremykenedy/fire-tv-toolkit):
 
 ```bash
 firetv-screensavers --install=contour-flow --yes
 screensaver --set=contour-flow
 ```
 
-Remove it with `firetv-screensavers --uninstall=contour-flow --force --yes`. To update Toolkit commands, run `git pull` and `node setup.js`, then install the new saver release using the install command above. Toolkit safeguards only cover settings the connected Fire TV supports. Fire TV UI can select installed DreamServices and display a preview, but it does not install arbitrary GitHub APKs.
+See [integrations](docs/INTEGRATIONS.md) for setup, removal and Fire TV UI controls.
 
 ## Privacy
 
@@ -113,13 +99,12 @@ Contour Flow requests no Internet permission and makes no runtime network reques
 
 ## Device support
 
-| Device | Status | Notes |
+| Target | Verified behavior | Limit |
 |---|---|---|
-| Google TV emulator, API 34, 1920 x 1080 | Preview tested | Installed the signed APK, opened its full-screen preview, tested remote palette selection, and inspected the settled scene capture. |
-| Fire TV hardware | Untested | Looking for a Fire TV owner to test selection, idle startup, remote settings, and exit behavior. Please report the model, Fire OS/API, resolution, tested behavior, and results in [Issues](https://github.com/jeremykenedy/contour-flow/issues). |
-| Android TV hardware | Untested | Looking for an Android TV owner to test device behavior and report the model, OS/API, resolution, tested behavior, and results in [Issues](https://github.com/jeremykenedy/contour-flow/issues). |
-| Google TV hardware | Untested | Looking for a Google TV owner to test device behavior and report the model, OS/API, resolution, tested behavior, and results in [Issues](https://github.com/jeremykenedy/contour-flow/issues). |
-| Native 4K output and sustained thermal behavior | Untested | Requires a physical 4K TV. The app renders at the size Android supplies and makes no native 4K performance claim. |
+| Android TV emulator, API 34, 1920 x 1080 | Native preview, remote settings, visible motion and lifecycle | Emulator results do not establish hardware pacing |
+| Fire TV, API 30, 1920 x 1080 | Candidate 5 native surface and three quiet presentation windows around 32.8 FPS | Physical Contour normal-idle startup and sustained thermals remain unverified |
+| Other Android TV and Google TV hardware | Not yet verified | See [verification](docs/VERIFICATION.md) |
+| Native 4K | Not verified | The app uses the surface Android provides |
 
 ## Build and tests
 
@@ -138,15 +123,14 @@ The signed build creates a unique local signing key under `~/.android/`. Keep it
 - [Building](docs/BUILDING.md)
 - [Configuration](docs/CONFIGURATION.md)
 - [Installation](docs/INSTALLATION.md)
+- [Integrations](docs/INTEGRATIONS.md)
+- [Animation development and measured limits](docs/ANIMATION_REWORK.md)
 - [Privacy](docs/PRIVACY.md)
 - [Release process](docs/RELEASING.md)
+- [1.1.0 release notes](docs/RELEASE_NOTES_1.1.0.md)
 - [Settings provider](docs/SETTINGS_PROVIDER.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Verification and device matrix](docs/VERIFICATION.md)
-
-## Credits
-
-The contour field, renderer, and visual assets are original to this repository. No third-party artwork, media, fonts, or runtime libraries are included.
 
 ## License
 
