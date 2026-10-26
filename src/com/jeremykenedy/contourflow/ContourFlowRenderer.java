@@ -3,6 +3,7 @@ package com.jeremykenedy.contourflow;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,6 +45,9 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
     private int width = 1, height = 1;
     private long lightingMinute = -1;
     private boolean night;
+    private ContourFlowMesh mesh;
+    private boolean fieldMesh;
+    private int vertexBuffer, indexBuffer;
 
     ContourFlowRenderer(Context context, ContourFlowOptions options) {
         this.context = context;
@@ -51,8 +55,8 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
         quad.put(new float[] {-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1}).position(0);
     }
 
-    private String source() {
-        try (InputStream in = context.getResources().openRawResource(R.raw.contours);
+    private String source(int resource) {
+        try (InputStream in = context.getResources().openRawResource(resource);
                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] data = new byte[4096];
             int length;
@@ -75,11 +79,21 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        int[] range = new int[2];
+        int[] precision = new int[1];
+        GLES20.glGetShaderPrecisionFormat(
+                GLES20.GL_FRAGMENT_SHADER, GLES20.GL_HIGH_FLOAT, range, 0, precision, 0);
+        fieldMesh = precision[0] >= 23;
         int vertex =
                 compile(
                         GLES20.GL_VERTEX_SHADER,
-                        "attribute vec2 aPosition;void main(){gl_Position=vec4(aPosition,0.,1.);}");
-        int fragment = compile(GLES20.GL_FRAGMENT_SHADER, source());
+                        fieldMesh
+                                ? source(R.raw.contours_vertex)
+                                : "attribute vec2 aPosition;void main(){gl_Position=vec4(aPosition,0.,1.);}");
+        int fragment =
+                compile(
+                        GLES20.GL_FRAGMENT_SHADER,
+                        source(fieldMesh ? R.raw.contours_mesh : R.raw.contours));
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertex);
         GLES20.glAttachShader(program, fragment);
@@ -101,6 +115,35 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
         light = GLES20.glGetUniformLocation(program, "uLight");
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
         GLES20.glDisable(GLES20.GL_BLEND);
+        if (fieldMesh) {
+            if (mesh == null) mesh = new ContourFlowMesh();
+            int[] buffers = new int[2];
+            GLES20.glGenBuffers(2, buffers, 0);
+            vertexBuffer = buffers[0];
+            indexBuffer = buffers[1];
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertexBuffer);
+            mesh.vertices.position(0);
+            GLES20.glBufferData(
+                    GLES20.GL_ARRAY_BUFFER,
+                    mesh.vertices.capacity() * 4,
+                    mesh.vertices,
+                    GLES20.GL_STATIC_DRAW);
+            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+            mesh.indices.position(0);
+            GLES20.glBufferData(
+                    GLES20.GL_ELEMENT_ARRAY_BUFFER,
+                    mesh.indices.capacity() * 2,
+                    mesh.indices,
+                    GLES20.GL_STATIC_DRAW);
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
+        Log.i(
+                "ContourFlow",
+                "Field rendering: "
+                        + (fieldMesh ? "256x144 gradient mesh" : "original fragment fallback")
+                        + "; fragment precision "
+                        + precision[0]);
     }
 
     @Override
@@ -130,9 +173,19 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
         GLES20.glUniform3fv(high, 1, HIGH[current.palette], 0);
         GLES20.glUniform3fv(ink, 1, INK[current.palette], 0);
         GLES20.glUniform1f(light, (.55f + current.brightness * .15f) * (dark ? .72f : 1));
-        quad.position(0);
         GLES20.glEnableVertexAttribArray(position);
-        GLES20.glVertexAttribPointer(position, 2, GLES20.GL_FLOAT, false, 0, quad);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+        if (fieldMesh) {
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertexBuffer);
+            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+            GLES20.glVertexAttribPointer(position, 2, GLES20.GL_FLOAT, false, 0, 0);
+            GLES20.glDrawElements(
+                    GLES20.GL_TRIANGLES, mesh.indexCount, GLES20.GL_UNSIGNED_SHORT, 0);
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
+        } else {
+            quad.position(0);
+            GLES20.glVertexAttribPointer(position, 2, GLES20.GL_FLOAT, false, 0, quad);
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+        }
     }
 }
