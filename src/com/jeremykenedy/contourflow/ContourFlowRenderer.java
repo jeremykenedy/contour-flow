@@ -73,8 +73,40 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
         GLES20.glCompileShader(shader);
         int[] status = new int[1];
         GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, status, 0);
-        if (status[0] == 0) throw new IllegalStateException(GLES20.glGetShaderInfoLog(shader));
+        if (status[0] == 0) {
+            String reason = GLES20.glGetShaderInfoLog(shader);
+            GLES20.glDeleteShader(shader);
+            throw new IllegalStateException(reason);
+        }
         return shader;
+    }
+
+    private int createProgram(String vertexSource, String fragmentSource) {
+        int vertex = 0, fragment = 0, linked = 0;
+        try {
+            vertex = compile(GLES20.GL_VERTEX_SHADER, vertexSource);
+            fragment = compile(GLES20.GL_FRAGMENT_SHADER, fragmentSource);
+            linked = GLES20.glCreateProgram();
+            GLES20.glAttachShader(linked, vertex);
+            GLES20.glAttachShader(linked, fragment);
+            GLES20.glLinkProgram(linked);
+            int[] status = new int[1];
+            GLES20.glGetProgramiv(linked, GLES20.GL_LINK_STATUS, status, 0);
+            if (status[0] == 0) throw new IllegalStateException(GLES20.glGetProgramInfoLog(linked));
+            return linked;
+        } catch (RuntimeException error) {
+            if (linked != 0) GLES20.glDeleteProgram(linked);
+            throw error;
+        } finally {
+            if (vertex != 0) GLES20.glDeleteShader(vertex);
+            if (fragment != 0) GLES20.glDeleteShader(fragment);
+        }
+    }
+
+    private int originalProgram() {
+        return createProgram(
+                "attribute vec2 aPosition;void main(){gl_Position=vec4(aPosition,0.,1.);}",
+                source(R.raw.contours));
     }
 
     @Override
@@ -84,25 +116,17 @@ final class ContourFlowRenderer implements GLSurfaceView.Renderer {
         GLES20.glGetShaderPrecisionFormat(
                 GLES20.GL_FRAGMENT_SHADER, GLES20.GL_HIGH_FLOAT, range, 0, precision, 0);
         fieldMesh = precision[0] >= 23;
-        int vertex =
-                compile(
-                        GLES20.GL_VERTEX_SHADER,
-                        fieldMesh
-                                ? source(R.raw.contours_vertex)
-                                : "attribute vec2 aPosition;void main(){gl_Position=vec4(aPosition,0.,1.);}");
-        int fragment =
-                compile(
-                        GLES20.GL_FRAGMENT_SHADER,
-                        source(fieldMesh ? R.raw.contours_mesh : R.raw.contours));
-        program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, vertex);
-        GLES20.glAttachShader(program, fragment);
-        GLES20.glLinkProgram(program);
-        int[] status = new int[1];
-        GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, status, 0);
-        GLES20.glDeleteShader(vertex);
-        GLES20.glDeleteShader(fragment);
-        if (status[0] == 0) throw new IllegalStateException(GLES20.glGetProgramInfoLog(program));
+        if (fieldMesh) {
+            try {
+                program = createProgram(source(R.raw.contours_vertex), source(R.raw.contours_mesh));
+            } catch (IllegalStateException unsupported) {
+                fieldMesh = false;
+                Log.w("ContourFlow", "Gradient field unavailable; using original fragment scene");
+                program = originalProgram();
+            }
+        } else {
+            program = originalProgram();
+        }
         position = GLES20.glGetAttribLocation(program, "aPosition");
         phaseLocation = GLES20.glGetUniformLocation(program, "uPhase");
         shape = GLES20.glGetUniformLocation(program, "uRelief");

@@ -33,6 +33,7 @@ public final class ContourFlowMeshTest {
             if (!Float.isFinite(x) || !Float.isFinite(y) || Math.abs(x) > 1 || Math.abs(y) > 1)
                 throw new AssertionError("Vertex outside the full native surface");
         }
-        System.out.println("Full-surface positive triangles, finite bounds and unsigned indices pass");
+        System.out.println(
+                "Full-surface positive triangles, finite bounds and unsigned indices pass");
     }
 }

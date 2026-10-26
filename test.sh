@@ -18,3 +18,11 @@ java -cp build/frame-tests com.jeremykenedy.contourflow.ContourFlowFrameTest
 
 javac -d build/tests src/com/jeremykenedy/contourflow/ContourFlowMesh.java tests/ContourFlowMeshTest.java
 java -cp build/tests com.jeremykenedy.contourflow.ContourFlowMeshTest
+
+mkdir -p build/renderer-tests
+find tests/renderer-support -name '*.java' > build/renderer-tests/sources.txt
+javac -d build/renderer-tests @build/renderer-tests/sources.txt \
+  src/com/jeremykenedy/contourflow/ContourFlowOptions.java \
+  src/com/jeremykenedy/contourflow/ContourFlowMesh.java \
+  src/com/jeremykenedy/contourflow/ContourFlowRenderer.java tests/ContourFlowRendererTest.java
+java -cp build/renderer-tests com.jeremykenedy.contourflow.ContourFlowRendererTest
