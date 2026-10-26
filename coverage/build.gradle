@@ -40,7 +40,7 @@ tasks.register('coverageReport', JacocoReport) {
     executionData fileTree(layout.buildDirectory).include('**/*.exec')
     classDirectories.from fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/compileDebugJavaWithJavac/classes") {
         include 'com/jeremykenedy/contourflow/ContourFlowOptions.class'
-        include 'com/jeremykenedy/contourflow/ContourFlowField.class'
+        include 'com/jeremykenedy/contourflow/ContourFlowMotion.class'
         include 'com/jeremykenedy/contourflow/ContourFlowPreferences.class'
         include 'com/jeremykenedy/contourflow/ContourFlowSettingsProvider.class'
         exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class'

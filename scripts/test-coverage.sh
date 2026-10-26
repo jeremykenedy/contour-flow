@@ -32,7 +32,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 report = ET.parse('build/coverage/jacoco.xml').getroot()
 expected = {str(Path('com/jeremykenedy/contourflow') / name) for name in
-            ('ContourFlowOptions.java', 'ContourFlowField.java', 'ContourFlowPreferences.java',
+            ('ContourFlowOptions.java', 'ContourFlowMotion.java', 'ContourFlowPreferences.java',
              'ContourFlowSettingsProvider.java')}
 reported = {package.get('name') + '/' + source.get('name')
             for package in report.findall('package') for source in package.findall('sourcefile')}
