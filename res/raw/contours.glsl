@@ -1,7 +1,11 @@
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+const float MIN_SLOPE=0.0000001;
+const float FLAT_SLOPE=0.000003;
 #else
 precision mediump float;
+const float MIN_SLOPE=0.000061;
+const float FLAT_SLOPE=0.00015;
 #endif
 uniform float uPhase, uRelief, uLevels, uWeight, uLight;
 uniform vec2 uPixel;
@@ -11,6 +15,13 @@ uniform vec3 uLow, uHigh, uInk;
 vec3 hill(vec2 p,float falloff) {
     float value=exp(-dot(p,p)*falloff);
     return vec3(value,-2.0*falloff*p*value);
+}
+
+// Pixel width stays stable on shallow slopes; unresolved flat bands fade away.
+float contourBand(float distance,float footprint,float innerPixels,float outerPixels) {
+    float pixelDistance=distance/max(footprint,MIN_SLOPE);
+    float visibility=smoothstep(MIN_SLOPE,FLAT_SLOPE,footprint);
+    return (1.-smoothstep(innerPixels,outerPixels,pixelDistance))*visibility;
 }
 
 void main() {
@@ -47,11 +58,10 @@ void main() {
     float diffuse=.38+.62*max(0.,dot(normal,normalize(vec3(-.55,.65,1.))));
     vec3 color=mix(uLow,uHigh,smoothstep(.22,.84,h.x))*diffuse;
     // Estimate a pixel's height footprint analytically, without an extension or coarse mesh.
-    float footprint=max(length(gradient*size*uPixel),.00018);
+    float footprint=length(gradient*size*uPixel);
     float distance=abs(fract(h.x*uLevels+.5)-.5)/uLevels;
-    float aa=footprint*.8;
-    float contour=1.-smoothstep(footprint*uWeight,footprint*uWeight+aa,distance);
-    float halo=1.-smoothstep(footprint*(uWeight+1.),footprint*(uWeight+6.),distance);
+    float contour=contourBand(distance,footprint,uWeight,uWeight+.8);
+    float halo=contourBand(distance,footprint,uWeight+1.,uWeight+6.);
     float accent=.65+.35*sin(h.x*8.0+t);
     color+=uInk*halo*.055;
     color=mix(color,uInk*(.70+.22*accent),contour*.87);

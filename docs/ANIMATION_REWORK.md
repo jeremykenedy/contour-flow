@@ -25,7 +25,7 @@ without a long-running discontinuity.
 
 The package and upgrade signer are unchanged. The existing PreviewActivity
 is exported so hosts can reach its actual full-screen scene directly. The
-prototype is version 1.1.0/code2; it has not been published or integrated.
+prototype is version 1.1.0/code3; it has not been published or integrated.
 
 Local checks cover existing options/installer behavior, phase/speed controls,
 pause/resume, duplicate starts, scheduling gaps and phase wrapping. Both APK
@@ -34,3 +34,23 @@ GPU shader; actual driver shader compilation, native image quality, motion,
 D-pad controls, lifecycle and target-device pacing remain open. Existing
 coverage wiring follows the replacement motion clock; a full coverage/release
 sweep is deferred until the visual prototype warrants release work.
+
+## Native candidate 2 and width correction 3
+
+Candidate 2 compiled and rendered on the API34 Google TV AVD at an actual
+1920x1080 SurfaceView. Native D-pad palette/landform/speed, process recreation,
+invalid-value preservation and Settings/Home surface removal passed. Three
+native looks and movies were captured; full moving visual acceptance remains
+open. The new unique install was stopped and all prior33 apps, UI14 keys,
+OS19 keys, provider values, external bytes, appops and accessibility state were
+restored exactly.
+
+The dense Sandstone/Coast look exposed a real defect: an absolute .00018
+height-footprint floor inflated line width on shallow terrain. Candidate 3
+keeps the field, time, colors and seven controls unchanged. The contour width
+now uses actual pixel distance and fades bands whose gradient is below usable
+precision, including a conservative mediump fallback. Scalar tests evaluate
+the production shader band function for stable pixel half-width across slopes,
+finite/invisible flat terrain and effective line-weight changes. This is a CPU
+math reference, not a shader compiler or native-render test. Candidate 3 still
+needs a new native grant and actual flat-Coast review. Candidate 2 stays frozen.

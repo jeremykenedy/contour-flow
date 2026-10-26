@@ -7,3 +7,4 @@ mkdir -p build/tests
 javac -d build/tests src/com/jeremykenedy/contourflow/ContourFlowOptions.java src/com/jeremykenedy/contourflow/ContourFlowMotion.java tests/ContourFlowOptionsTest.java tests/ContourFlowMotionTest.java
 java -cp build/tests com.jeremykenedy.contourflow.ContourFlowOptionsTest
 java -cp build/tests com.jeremykenedy.contourflow.ContourFlowMotionTest
+python3 -m unittest discover -s tests -p 'test_contour_width.py' -v
