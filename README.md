@@ -40,9 +40,9 @@ Show some love by starring this repository on GitHub.
 
 ## Screenshots
 
-The release renderer is shown below in an unmodified code 5 native Fire TV capture at 1920 x 1080. Code 6 preserves that scene and adds release packaging. See [the gallery and provenance](docs/ARTWORK.md) for settings, version and device details.
+The release is shown below in an unmodified code 6 normal-idle Dream capture on an API 34 Google TV emulator at 1920 x 1080. See [the gallery and provenance](docs/ARTWORK.md) for current settings, credits and separately labelled Fire TV captures.
 
-<p align="center"><a href="art/screenshots/contour-default-api30.png"><img src="art/screenshots/contour-default-api30.png" alt="Animated Abyss contour ridges on the native Android TV surface" width="800"></a></p>
+<p align="center"><a href="art/screenshots/contour-dream-code6-api34.png"><img src="art/screenshots/contour-dream-code6-api34.png" alt="Code 6 Abyss contour ridges during a normal-idle Dream on API 34" width="800"></a></p>
 
 ## Features and settings
 
@@ -102,7 +102,7 @@ Contour Flow requests no Internet permission and makes no runtime network reques
 
 | Target | Verified behavior | Limit |
 |---|---|---|
-| Android TV emulator, API 34, 1920 x 1080 | Native preview, remote settings, visible motion and lifecycle | Emulator results do not establish hardware pacing |
+| Android TV emulator, API 34, 1920 x 1080 | Code 6 normal-idle Dream, visible motion, preview, settings and offline credits | Emulator results do not establish hardware pacing |
 | Fire TV, API 30, 1920 x 1080 | Candidate 5 native surface and three quiet presentation windows around 32.8 FPS | Physical Contour normal-idle startup and sustained thermals remain unverified |
 | Other Android TV and Google TV hardware | Not yet verified | See [verification](docs/VERIFICATION.md) |
 | Native 4K | Not verified | The app uses the surface Android provides |
