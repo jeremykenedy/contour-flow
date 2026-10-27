@@ -2,8 +2,8 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$HERE"
-GRADLE_VERSION=8.14.3
-GRADLE_SHA=bd71102213493060956ec229d946beee57158dbd89d0e62b91bca0fa2c5f3531
+GRADLE_VERSION=9.6.1
+GRADLE_SHA=9c0f7faeeb306cb14e4279a3e084ca6b596894089a0638e68a07c945a32c9e14
 ARCHIVE="$HERE/build/tools/gradle-$GRADLE_VERSION-bin.zip"
 mkdir -p build/tools build/coverage
 if [[ ! -f "$ARCHIVE" ]]; then

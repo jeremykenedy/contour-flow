@@ -1,0 +1,40 @@
+name: Build and coverage
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Install Android build tools and host checks
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install -r requirements-dev.txt
+      - name: Verify motion, mesh, renderer boundaries and installer behavior
+        run: bash test.sh
+      - name: Enforce owned Java and installer coverage
+        run: bash scripts/test-coverage.sh
+      - name: Build unsigned review APK
+        run: bash build.sh --unsigned
+      - name: Verify style, documentation and secret boundary
+        run: |
+          bash scripts/check-style.sh
+          python3 scripts/check-docs.py
+          bash scripts/check-secrets.sh
+          git diff --check

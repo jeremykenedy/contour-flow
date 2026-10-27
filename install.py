@@ -37,16 +37,38 @@ def adb(device, *args):
     return subprocess.check_output([executable, "-s", device, *args], text=True).strip()
 
 
-def save_original(device, path):
+def current_user(device):
+    try:
+        value = adb(device, "shell", "am", "get-current-user")
+    except subprocess.CalledProcessError as error:
+        raise SystemExit("Could not verify the current Android user.") from error
+    if not re.fullmatch(r"[0-9]+", value) or len(value) > 10 or int(value) > 2147483647:
+        raise SystemExit("The current Android user response is ambiguous.")
+    return str(int(value))
+
+
+def check_backup_user(saved, user):
+    if str(saved.get("user", "0")) != str(user):
+        raise SystemExit(
+            "The saved settings belong to a different Android user. Use a separate --state-file."
+        )
+
+
+def save_original(device, path, user="0"):
     if path.exists():
         saved = json.loads(path.read_text())
         if saved["device"] != device:
             raise SystemExit("The saved settings belong to a different device.")
+        check_backup_user(saved, user)
         return
     saved = {
         "device": device,
+        "user": str(user),
         "settings": {
-            key: adb(device, "shell", "settings", "get", "secure", key) for key in KEYS
+            key: adb(
+                device, "shell", "settings", "--user", str(user), "get", "secure", key
+            )
+            for key in KEYS
         },
     }
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -56,30 +78,41 @@ def save_original(device, path):
         file.write("\n")
 
 
-def set_setting(device, key, value):
+def set_setting(device, key, value, user="0"):
     if value == "null":
-        adb(device, "shell", "settings", "delete", "secure", key)
+        adb(device, "shell", "settings", "--user", str(user), "delete", "secure", key)
     else:
-        adb(device, "shell", "settings", "put", "secure", key, value)
-    actual = adb(device, "shell", "settings", "get", "secure", key)
+        adb(
+            device,
+            "shell",
+            "settings",
+            "--user",
+            str(user),
+            "put",
+            "secure",
+            key,
+            value,
+        )
+    actual = adb(device, "shell", "settings", "--user", str(user), "get", "secure", key)
     if actual != value:
         raise SystemExit(
             f"Device did not save {key}: expected {value!r}, received {actual!r}"
         )
 
 
-def restore(device, path):
+def restore(device, path, user="0"):
     if not path.is_file():
         raise SystemExit("No saved screensaver settings exist for this app.")
     saved = json.loads(path.read_text())
     if saved["device"] != device:
         raise SystemExit("The saved settings belong to a different device.")
+    check_backup_user(saved, user)
     for key in KEYS:
-        set_setting(device, key, saved["settings"][key])
+        set_setting(device, key, saved["settings"][key], user=user)
     print("Restored the previous screensaver settings. Contour Flow remains installed.")
 
 
-def install(device, path, apk_path=None):
+def install(device, path, apk_path=None, user="0"):
     apk = apk_path or HERE / "build" / "contour-flow.apk"
     apk = Path(apk).expanduser().resolve()
     checksum = Path(str(apk) + ".sha256")
@@ -92,14 +125,16 @@ def install(device, path, apk_path=None):
             digest.update(chunk)
     if digest.hexdigest() != expected:
         raise SystemExit("APK checksum mismatch. Rebuild before installing.")
-    save_original(device, path)
-    print(adb(device, "install", "--no-incremental", "-r", str(apk)))
+    save_original(device, path, user=user)
+    print(
+        adb(device, "install", "--user", str(user), "--no-incremental", "-r", str(apk))
+    )
     try:
-        set_setting(device, "screensaver_components", COMPONENT)
-        set_setting(device, "screensaver_enabled", "1")
-        set_setting(device, "screensaver_activate_on_sleep", "1")
+        set_setting(device, "screensaver_components", COMPONENT, user=user)
+        set_setting(device, "screensaver_enabled", "1", user=user)
+        set_setting(device, "screensaver_activate_on_sleep", "1", user=user)
     except BaseException:
-        restore(device, path)
+        restore(device, path, user=user)
         raise
     print(
         "Contour Flow selected. Existing screensaver and sleep timeouts are preserved."
@@ -144,6 +179,7 @@ def main():
     )
     args = parser.parse_args()
     adb(args.device, "get-state")
+    user = current_user(args.device)
     state = args.state_file or HERE / "device-state.json"
     action = (
         "Restore and uninstall Contour Flow"
@@ -154,20 +190,20 @@ def main():
             else "Install Contour Flow and select it as the idle screensaver"
         )
     )
-    if not confirm(action, args.yes):
+    if not confirm(f"{action} on {args.device}, Android user {user}", args.yes):
         print("Cancelled. No device settings were changed.")
         return
     if args.uninstall:
-        restore(args.device, state)
-        print(adb(args.device, "uninstall", PACKAGE))
+        restore(args.device, state, user=user)
+        print(adb(args.device, "uninstall", "--user", user, PACKAGE))
         print("Contour Flow removed.")
     elif args.restore:
-        restore(args.device, state)
+        restore(args.device, state, user=user)
     else:
         if args.apk is None:
-            install(args.device, state)
+            install(args.device, state, user=user)
         else:
-            install(args.device, state, args.apk)
+            install(args.device, state, args.apk, user=user)
 
 
 if __name__ == "__main__":

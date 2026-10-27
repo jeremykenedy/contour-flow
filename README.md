@@ -6,15 +6,16 @@
 <p align="center">Animated topographic contour lines for Fire TV, Android TV, and Google TV.</p>
 
 <p align="center">
-  <a href="https://github.com/jeremykenedy/contour-flow/releases"><img src="https://img.shields.io/github/v/release/jeremykenedy/contour-flow?display_name=tag&amp;label=release" alt="Latest release"></a>
   <a href="https://github.com/jeremykenedy/contour-flow/releases"><img src="https://img.shields.io/github/downloads/jeremykenedy/contour-flow/total?label=downloads" alt="Downloads"></a>
+  <a href="https://github.com/jeremykenedy/contour-flow/releases"><img src="https://img.shields.io/github/v/release/jeremykenedy/contour-flow?display_name=tag&amp;label=release" alt="Latest release"></a>
+  <a href="https://github.com/jeremykenedy/contour-flow/actions/workflows/ci.yml"><img src="https://github.com/jeremykenedy/contour-flow/actions/workflows/ci.yml/badge.svg" alt="Build and coverage"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/jeremykenedy/contour-flow/stargazers"><img src="https://img.shields.io/github/stars/jeremykenedy/contour-flow?style=social" alt="Star this repository"></a>
-  <a href="https://github.com/jeremykenedy"><img src="https://img.shields.io/github/followers/jeremykenedy?label=follow&amp;style=social" alt="Follow jeremykenedy on GitHub"></a>
-  <a href="https://github.com/sponsors/jeremykenedy"><img src="https://img.shields.io/badge/sponsor-jeremykenedy-ea4aaa?logo=githubsponsors" alt="Sponsor jeremykenedy"></a>
+  <a href="https://github.com/jeremykenedy"><img src="https://img.shields.io/github/followers/jeremykenedy?label=Follow&amp;style=social" alt="Follow"></a>
+  <a href="https://github.com/jeremykenedy/contour-flow/stargazers"><img src="https://img.shields.io/github/stars/jeremykenedy/contour-flow?label=Star&amp;style=social" alt="Star"></a>
+  <a href="https://github.com/sponsors/jeremykenedy"><img src="https://img.shields.io/badge/Sponsor-GitHub-ea4aaa" alt="Sponsor"></a>
 </p>
 
 ## Table of Contents
@@ -46,18 +47,18 @@ The release renderer is shown below in an unmodified code 5 native Fire TV captu
 ## Features and settings
 
 | Feature | What it does | Guide |
-|---|---|---|
-| Moving relief | Continuous ridges, basins and coastal contours at the supplied display size | [Architecture](docs/ARCHITECTURE.md) |
-| Seven controls | Palette, relief, density, speed, line weight, lighting and brightness | [Configuration](docs/CONFIGURATION.md) |
-| Random choices | Randomize supported settings when a new scene starts | [Configuration](docs/CONFIGURATION.md) |
-| Remote controls | Full-screen preview, D-pad settings and offline credits | [Installation](docs/INSTALLATION.md) |
-| Host integration | Stable settings provider and compatible upgrades | [Integrations](docs/INTEGRATIONS.md) |
+| --- | --- | --- |
+| Animated terrain | Three continuously moving relief fields with smooth contour lines | [Architecture](docs/ARCHITECTURE.md) |
+| Useful controls | Palette, density, speed, weight, lighting and brightness, with Random choices | [Settings](docs/CONFIGURATION.md) |
+| TV operation | D-pad settings, full-screen preview and proper Dream lifecycle | [Installation](docs/INSTALLATION.md) |
+| App-owned schema | Seven validated persistent controls for supported hosts | [Provider](docs/SETTINGS_PROVIDER.md) |
+| Offline scene | No network permission, ads, analytics or tracking | [Privacy](docs/PRIVACY.md) |
 
 ## Requirements
 
 - Android 6.0 (API 23) or newer.
 - A TV device that supports Android DreamService screensavers.
-- Android SDK platform 36, build-tools 36.0.0, Java, and ADB for local builds and installation.
+- Python 3.10 or later and an authorized ADB connection for the optional computer installer. Build tools are listed in the [building guide](docs/BUILDING.md).
 
 ## Install and activate
 
