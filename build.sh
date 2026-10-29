@@ -27,8 +27,8 @@ fi
 rm -rf "$OUT/classes" "$OUT/dex" "$OUT/generated"
 mkdir -p "$OUT/classes" "$OUT/dex"
 "$BUILD_TOOLS/aapt2" compile --dir "$HERE/res" -o "$OUT/res.zip"
-"$BUILD_TOOLS/aapt2" link -o "$OUT/unsigned.apk" -I "$ANDROID_JAR" --manifest "$HERE/AndroidManifest.xml" \
-  --min-sdk-version 23 --target-sdk-version 35 --version-code 1 --version-name 1.0.0 --java "$OUT/generated" "$OUT/res.zip"
+"$BUILD_TOOLS/aapt2" link -o "$OUT/unsigned.apk" -I "$ANDROID_JAR" --manifest "$HERE/AndroidManifest.xml" -A "$HERE/assets" \
+  --min-sdk-version 23 --target-sdk-version 35 --version-code 6 --version-name 1.1.0 --java "$OUT/generated" "$OUT/res.zip"
 find "$HERE/src" "$OUT/generated" -name '*.java' > "$OUT/sources.txt"
 javac -nowarn -Xlint:-options -source 8 -target 8 -bootclasspath "$ANDROID_JAR" -d "$OUT/classes" @"$OUT/sources.txt"
 find "$OUT/classes" -name '*.class' > "$OUT/classes.txt"
@@ -44,7 +44,7 @@ else
   cp "$OUT/aligned.apk" "$APK"
 fi
 (cd "$OUT" && shasum -a 256 "$(basename "$APK")" > "$(basename "$APK").sha256")
-"$BUILD_TOOLS/aapt2" dump badging "$APK" | grep -F "package: name='com.jeremykenedy.contourflow' versionCode='1' versionName='1.0.0'" >/dev/null
+"$BUILD_TOOLS/aapt2" dump badging "$APK" | grep -F "package: name='com.jeremykenedy.contourflow' versionCode='6' versionName='1.1.0'" >/dev/null
 BADGING="$("$BUILD_TOOLS/aapt2" dump badging "$APK")"
 MANIFEST="$("$BUILD_TOOLS/aapt2" dump xmltree "$APK" --file AndroidManifest.xml)"
 PERMISSIONS="$("$BUILD_TOOLS/aapt2" dump permissions "$APK")"

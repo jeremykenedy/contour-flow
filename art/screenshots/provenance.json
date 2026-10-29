@@ -1,0 +1,187 @@
+{
+  "captures": [
+    {
+      "file": "art/screenshots/contour-default-api30.png",
+      "sha256": "338e0e9799cb120a28f59aad44c63e94b1ae140fb8c3ae1686033156986b1caf",
+      "bytes": 679537,
+      "sourceBuildCode": 5,
+      "device": "API 30 physical Fire TV",
+      "settings": "Default Abyss/Ridges",
+      "transformation": "None; raw native capture"
+    },
+    {
+      "file": "art/screenshots/contour-coast-api30.png",
+      "sha256": "c9c610330264195418b9d7fe598446a51009eaa61d50bc1fe64ea118dc4b5e51",
+      "bytes": 581377,
+      "sourceBuildCode": 5,
+      "device": "API 30 physical Fire TV",
+      "settings": "Sandstone/Coast, weight 4",
+      "transformation": "None; raw native capture"
+    },
+    {
+      "file": "art/screensaver-preview.jpg",
+      "sha256": "1d3a1e249bb2702478390b079168db4179d9088ffa4ac1fb8c69c275300af420",
+      "derivedFrom": "art/screenshots/contour-default-api30.png",
+      "transformation": "Lanczos resize to 384x216, JPEG quality 95; no scene edits"
+    },
+    {
+      "sha256": "e1f06dedc68eb194d90bc58c567f563249ae419cd60f67c42a5f8638fed8424b",
+      "bytes": 93353,
+      "nativeResolution": [
+        1920,
+        1080
+      ],
+      "unmodifiedRawScreencap": true,
+      "personallyViewed": true,
+      "file": "art/screenshots/contour-settings-code6-api34.png",
+      "sourceFile": "contour6-settings-api34-1920x1080.png",
+      "sourceBuildCode": 6,
+      "device": "API 34 Google TV emulator",
+      "actualUser": 0,
+      "transformation": "None; raw native capture",
+      "settings": {
+        "schemaVersion": 1,
+        "palette": "Abyss",
+        "relief": "Ridges",
+        "density": "3",
+        "speed": "3",
+        "weight": "2",
+        "lighting": "Auto",
+        "brightness": "3"
+      }
+    },
+    {
+      "sha256": "5078d6bc0216db570af199764fcd349f7496e3285d0a5e8a0b5329d5ca61ff6b",
+      "bytes": 131160,
+      "nativeResolution": [
+        1920,
+        1080
+      ],
+      "unmodifiedRawScreencap": true,
+      "personallyViewed": true,
+      "file": "art/screenshots/contour-credits-code6-api34.png",
+      "sourceFile": "contour6-credits-api34-1920x1080.png",
+      "sourceBuildCode": 6,
+      "device": "API 34 Google TV emulator",
+      "actualUser": 0,
+      "transformation": "None; raw native capture",
+      "settings": {
+        "schemaVersion": 1,
+        "palette": "Abyss",
+        "relief": "Ridges",
+        "density": "3",
+        "speed": "3",
+        "weight": "2",
+        "lighting": "Auto",
+        "brightness": "3"
+      }
+    },
+    {
+      "sha256": "fd47d4456b022697c8739d23d703a6397f83169883296e6fc2909e3b44a7fb11",
+      "bytes": 685296,
+      "nativeResolution": [
+        1920,
+        1080
+      ],
+      "unmodifiedRawScreencap": true,
+      "personallyViewed": true,
+      "file": "art/screenshots/contour-dream-code6-api34.png",
+      "sourceFile": "contour6-default-normal-Dream-api34-1920x1080.png",
+      "sourceBuildCode": 6,
+      "device": "API 34 Google TV emulator",
+      "actualUser": 0,
+      "transformation": "None; raw native capture",
+      "settings": {
+        "schemaVersion": 1,
+        "palette": "Abyss",
+        "relief": "Ridges",
+        "density": "3",
+        "speed": "3",
+        "weight": "2",
+        "lighting": "Auto",
+        "brightness": "3"
+      }
+    },
+    {
+      "sha256": "ae91607b1030fdec91cc91bbdd3d26e54ad1db625aa942e092584958b8a08a4b",
+      "bytes": 672182,
+      "nativeResolution": [
+        1920,
+        1080
+      ],
+      "unmodifiedRawScreencap": true,
+      "personallyViewed": true,
+      "file": "art/screenshots/contour-dream-after20s-code6-api34.png",
+      "sourceFile": "contour6-normal-Dream-after20s-api34-1920x1080.png",
+      "sourceBuildCode": 6,
+      "device": "API 34 Google TV emulator",
+      "actualUser": 0,
+      "transformation": "None; raw native capture",
+      "settings": {
+        "schemaVersion": 1,
+        "palette": "Abyss",
+        "relief": "Ridges",
+        "density": "3",
+        "speed": "3",
+        "weight": "2",
+        "lighting": "Auto",
+        "brightness": "3"
+      }
+    },
+    {
+      "sha256": "67e59febbed194d1caae532ad4ef59ed4a7ea67c60fb013bdf3513571b1d95cf",
+      "bytes": 593029,
+      "nativeResolution": [
+        1920,
+        1080
+      ],
+      "unmodifiedRawScreencap": true,
+      "personallyViewed": true,
+      "file": "art/screenshots/contour-coast-code6-api34.png",
+      "sourceFile": "contour6-coast-sandstone-Preview-api34-1920x1080.png",
+      "sourceBuildCode": 6,
+      "device": "API 34 Google TV emulator",
+      "actualUser": 0,
+      "transformation": "None; raw native capture",
+      "settings": {
+        "schemaVersion": 1,
+        "palette": "Sandstone",
+        "relief": "Coast",
+        "density": "3",
+        "speed": "3",
+        "weight": "2",
+        "lighting": "Auto",
+        "brightness": "3"
+      }
+    }
+  ],
+  "qualification": "Current code 6 raw API 34 captures and normal-idle Dream proof; code 5 API 30 physical captures retained separately. No code 6 FireOS normal-idle, native 4K, sustained thermal or owner acceptance claim.",
+  "releaseArtifact": {
+    "version": "1.1.0",
+    "versionCode": 6,
+    "bytes": 66572,
+    "sha256": "6b4302ee3220c25df5b40c3e7ff6d72d6c859b4403203f0577a01a9b7cc2ebf6",
+    "signerSha256": "4b9b57d5eb49024959ea6eb2f87e2cc41a1a1db128ab8b58070b3ddfbefc9d27"
+  },
+  "normalDream": {
+    "platform": "API 34 Google TV emulator",
+    "actualUser": 0,
+    "idleSeconds": 301.454,
+    "isPreview": false,
+    "bound": true,
+    "surface": [
+      1920,
+      1080
+    ],
+    "movieSha256": "ab6f4ec0c6c05a04edab01e9b7919614d11a25aff76485af2441c25484917f6c",
+    "movieDurationSeconds": 19.684156,
+    "encodedFrames": 969,
+    "notHardwarePacingEvidence": true
+  },
+  "strictReturn": {
+    "passed": true,
+    "errors": [],
+    "evidence": "stick6-contour6-final-native/strict-return.json",
+    "scope": "34 UID identities, OS19, both saver option sets and per-user presence, UI72 stopped and unexecuted, external files/icons/pictures, grants/permission flags/configured app-op modes, accessibility and guard restored; Google Home Awake/Dream null. UI14 preservation references prior strict proof, not a fresh private export."
+  }
+}

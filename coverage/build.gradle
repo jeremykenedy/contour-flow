@@ -12,6 +12,7 @@ android {
     sourceSets {
         main { manifest.srcFile '../build/coverage/AndroidManifest.xml'; java.srcDirs = ['../src']; res.srcDirs = ['../res'] }
         test.java.srcDirs = ['../tests']
+        test.java.exclude 'frame-support/**', 'ContourFlowFrameTest.java', 'renderer-support/**', 'ContourFlowRendererTest.java'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
     testOptions {
@@ -40,7 +41,8 @@ tasks.register('coverageReport', JacocoReport) {
     executionData fileTree(layout.buildDirectory).include('**/*.exec')
     classDirectories.from fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/compileDebugJavaWithJavac/classes") {
         include 'com/jeremykenedy/contourflow/ContourFlowOptions.class'
-        include 'com/jeremykenedy/contourflow/ContourFlowField.class'
+        include 'com/jeremykenedy/contourflow/ContourFlowMotion.class'
+        include 'com/jeremykenedy/contourflow/ContourFlowMesh.class'
         include 'com/jeremykenedy/contourflow/ContourFlowPreferences.class'
         include 'com/jeremykenedy/contourflow/ContourFlowSettingsProvider.class'
         exclude '**/R.class', '**/R$*.class', '**/BuildConfig.class'

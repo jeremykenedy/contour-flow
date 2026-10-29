@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.jeremykenedy.contourflow">
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <application android:label="Contour Flow" android:allowBackup="false" android:usesCleartextTraffic="false"
         android:hardwareAccelerated="true" android:icon="@drawable/icon" android:banner="@drawable/banner"
         android:theme="@android:style/Theme.Material.NoActionBar">
@@ -13,7 +14,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingsActivity" android:exported="true" android:screenOrientation="landscape" />
-        <activity android:name=".PreviewActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".CreditsActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".PreviewActivity" android:exported="true" android:screenOrientation="landscape" />
         <service android:name=".ContourFlowDreamService" android:label="Contour Flow" android:exported="true"
             android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>

@@ -20,9 +20,94 @@ spec.loader.exec_module(installer)
 
 class InstallTests(unittest.TestCase):
     def setUp(self):
+        self.real_current_user = installer.current_user
+        user = patch.object(installer, "current_user", return_value="0")
+        self.user = user.start()
+        self.addCleanup(user.stop)
+        guard = patch(
+            "subprocess.check_output",
+            side_effect=AssertionError("Unexpected external command in unit test"),
+        )
+        guard.start()
+        self.addCleanup(guard.stop)
         resolver = patch.object(installer.shutil, "which", return_value="/tools/adb")
         resolver.start()
         self.addCleanup(resolver.stop)
+
+    def test_current_user_validation_and_failed_query(self):
+        for value in ("0", "10", "00012"):
+            with patch.object(installer, "adb", return_value=value) as command:
+                self.assertEqual(str(int(value)), self.real_current_user("tv"))
+            command.assert_called_once_with("tv", "shell", "am", "get-current-user")
+        for value in (
+            "",
+            "-1",
+            "0\n10",
+            "Current user: 10",
+            "2147483648",
+            "99999999999",
+        ):
+            with (
+                patch.object(installer, "adb", return_value=value),
+                self.assertRaisesRegex(SystemExit, "ambiguous"),
+            ):
+                self.real_current_user("tv")
+        with (
+            patch.object(
+                installer,
+                "adb",
+                side_effect=installer.subprocess.CalledProcessError(1, ["adb"]),
+            ),
+            self.assertRaisesRegex(SystemExit, "verify"),
+        ):
+            self.real_current_user("tv")
+
+    def test_backup_and_restore_keep_the_same_nonzero_user(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            with patch.object(installer, "adb", return_value="null") as command:
+                installer.save_original("tv", path, user="10")
+            self.assertEqual(json.loads(path.read_text())["user"], "10")
+            self.assertTrue(
+                all(
+                    call.args[3:5] == ("--user", "10")
+                    for call in command.call_args_list
+                )
+            )
+            with patch.object(installer, "set_setting") as setting:
+                installer.restore("tv", path, user="10")
+            self.assertTrue(
+                all(call.kwargs == {"user": "10"} for call in setting.call_args_list)
+            )
+            for action in (installer.save_original, installer.restore):
+                with (
+                    patch.object(installer, "adb") as command,
+                    self.assertRaisesRegex(SystemExit, "different Android user"),
+                ):
+                    action("tv", path, user="0")
+                command.assert_not_called()
+
+    def test_cli_captures_nonzero_user_before_confirmation(self):
+        self.user.return_value = "10"
+        with (
+            patch.object(sys, "argv", ["install.py", "--device", "tv"]),
+            patch.object(installer, "adb"),
+            patch.object(installer, "install") as install,
+            patch("builtins.input", return_value="no") as prompt,
+        ):
+            installer.main()
+        self.user.assert_called_once_with("tv")
+        self.assertIn("tv, Android user 10", prompt.call_args.args[0])
+        install.assert_not_called()
+        with (
+            patch.object(sys, "argv", ["install.py", "--device", "tv", "--yes"]),
+            patch.object(installer, "adb"),
+            patch.object(installer, "install") as install,
+        ):
+            installer.main()
+        install.assert_called_once_with(
+            "tv", installer.HERE / "device-state.json", user="10"
+        )
 
     def test_adb_rejects_invalid_devices_and_missing_executable(self):
         with patch("subprocess.check_output") as run:
@@ -78,9 +163,10 @@ class InstallTests(unittest.TestCase):
                 patch.object(installer, "set_setting") as setting,
             ):
                 installer.install("tv", root / "state.json")
-                save.assert_called_once_with("tv", root / "state.json")
+                save.assert_called_once_with("tv", root / "state.json", user="0")
                 self.assertEqual(
-                    adb.call_args.args[1:4], ("install", "--no-incremental", "-r")
+                    adb.call_args.args[1:6],
+                    ("install", "--user", "0", "--no-incremental", "-r"),
                 )
                 self.assertEqual(
                     [call.args[1] for call in setting.call_args_list],
@@ -96,6 +182,8 @@ class InstallTests(unittest.TestCase):
                     "tv",
                     "shell",
                     "settings",
+                    "--user",
+                    "0",
                     "put",
                     "secure",
                     "screensaver_enabled",
@@ -138,6 +226,7 @@ class InstallTests(unittest.TestCase):
                         Path("second-tv.json")
                         if custom
                         else installer.HERE / "device-state.json",
+                        user="0",
                     )
         with (
             patch.object(
@@ -157,7 +246,10 @@ class InstallTests(unittest.TestCase):
         ):
             installer.main()
             install.assert_called_once_with(
-                "tv-1:5555", installer.HERE / "device-state.json", Path("release.apk")
+                "tv-1:5555",
+                installer.HERE / "device-state.json",
+                Path("release.apk"),
+                user="0",
             )
 
     def test_confirmation_cancel_and_uninstall_restore_before_removal(self):
@@ -187,9 +279,11 @@ class InstallTests(unittest.TestCase):
         ):
             installer.main()
             restore.assert_called_once_with(
-                "tv-1:5555", installer.HERE / "device-state.json"
+                "tv-1:5555", installer.HERE / "device-state.json", user="0"
             )
-            self.assertEqual(adb.call_args.args[1:], ("uninstall", installer.PACKAGE))
+            self.assertEqual(
+                adb.call_args.args[1:], ("uninstall", "--user", "0", installer.PACKAGE)
+            )
 
     def test_script_entry_point_validates_arguments_before_adb(self):
         with (
@@ -288,6 +382,8 @@ class InstallTests(unittest.TestCase):
                     "tv",
                     "shell",
                     "settings",
+                    "--user",
+                    "0",
                     "delete",
                     "secure",
                     "screensaver_components",
@@ -324,7 +420,7 @@ class InstallTests(unittest.TestCase):
             ):
                 with self.assertRaisesRegex(RuntimeError, "disconnected"):
                     installer.install("tv", root / "state.json")
-                restore.assert_called_once_with("tv", root / "state.json")
+                restore.assert_called_once_with("tv", root / "state.json", user="0")
 
 
 if __name__ == "__main__":

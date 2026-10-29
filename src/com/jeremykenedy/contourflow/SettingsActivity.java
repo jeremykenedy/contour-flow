@@ -1,6 +1,7 @@
 package com.jeremykenedy.contourflow;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -112,6 +113,15 @@ public final class SettingsActivity extends Activity {
         for (int i = 0; i < KEYS.length; i++) {
             buttons[i] = addRow(i, active[i], (options.randomMask & BITS[i]) != 0);
         }
+        Button credits = button("Credits and licenses");
+        credits.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(SettingsActivity.this, CreditsActivity.class));
+                    }
+                });
+        rows.addView(credits);
         buttons[focusedRow >= 0 && focusedRow < buttons.length ? focusedRow : 0].requestFocus();
     }
 
