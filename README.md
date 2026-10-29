@@ -57,6 +57,7 @@ The release is shown below in an unmodified code 6 normal-idle Dream capture on 
 ## Requirements
 
 - Android 6.0 (API 23) or newer.
+- OpenGL ES 2.0 support for the animated scene.
 - A TV device that supports Android DreamService screensavers.
 - Python 3.10 or later and an authorized ADB connection for the optional computer installer. Build tools are listed in the [building guide](docs/BUILDING.md).
 

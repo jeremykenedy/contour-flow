@@ -4,11 +4,20 @@ Continuously evolving topographic relief replaces the original nearly still Canv
 
 ## Upgrade guide
 
-Update from 1.0.0 using the same signed package through the standalone installer or a current host catalog. Existing palette, relief, density, speed, weight, lighting, brightness and random choices remain stored. No account, migration, new permission or runtime dependency is needed. Open the full-screen Preview, check motion and settings, then retain your selected system screensaver and timers. Keep your prior signed APK for recovery; Android may reject a downgrade, so do not uninstall if you need to preserve app data.
+Update from 1.0.0 using the same signed package. Android API 23 remains the minimum; the animated renderer now requires OpenGL ES 2.0 support. Existing palette, relief, density, speed, weight, lighting, brightness and random choices remain stored. No account, configuration migration or new permission is needed.
+
+Download `contour-flow.apk` and its `.sha256` sidecar from this release. Verify the checksum, then replace the existing package without changing the selected system screensaver or timers:
+
+```bash
+shasum -a 256 -c contour-flow.apk.sha256
+adb -s TV_IP:5555 install -r contour-flow.apk
+```
+
+Open the full-screen Preview and check visible motion and saved settings. The optional standalone installer also selects Contour Flow as the screensaver; use it only when that selection is wanted. Host catalogs may lag this release, so verify their offered version before updating. Keep your prior signed APK for recovery; Android may reject a downgrade, so do not uninstall if you need to preserve app data.
 
 ## Breaking changes
 
-None to the package, minimum Android API 23, seven-option settings contract or offline behavior. The scene's rendering and motion are intentionally different from 1.0.0.
+The package, minimum Android API 23, seven-option settings contract and offline behavior remain compatible. The scene's rendering and motion are intentionally different from 1.0.0 and now require OpenGL ES 2.0 hardware, as provided by the tested TV targets.
 
 ## Major changes
 
@@ -25,7 +34,7 @@ None to the package, minimum Android API 23, seven-option settings contract or o
 
 ## Verification and limits
 
-See [verification](VERIFICATION.md) for source checks, native build provenance and measured device results. Code 5 measured about 32.8 FPS at an actual 1920 x 1080 surface on one API 30 Fire TV. Code 6 preserves that core runtime and adds packaging; its final API 34 packaging gate passed with a real normal-idle Dream after 301.454 seconds, visible animation at an actual 1920 x 1080 surface, native Settings/Credits and exact final state restoration. Physical code 6 FireOS normal-idle behavior remains unverified. Native 4K, sustained thermal durability and broad owner visual acceptance remain unverified. Do not treat emulator or encoded-video frame rates as hardware pacing evidence.
+See [verification](https://github.com/jeremykenedy/contour-flow/blob/v1.1.0/docs/VERIFICATION.md) for source checks, native build provenance and measured device results. Code 5 measured about 32.8 FPS at an actual 1920 x 1080 surface on one API 30 Fire TV. Code 6 preserves that core runtime and adds packaging; its final API 34 packaging gate passed with a real normal-idle Dream after 301.454 seconds, visible animation at an actual 1920 x 1080 surface, native Settings/Credits and exact final state restoration. Physical code 6 FireOS normal-idle behavior remains unverified. Native 4K, sustained thermal durability and broad owner visual acceptance remain unverified. Do not treat emulator or encoded-video frame rates as hardware pacing evidence.
 
 The app remains offline with no analytics, tracking, ads or runtime network permission. Notices and the complete Apache license are bundled.
 
@@ -33,4 +42,4 @@ The app remains offline with no analytics, tracking, ads or runtime network perm
 
 ## Signed package
 
-The 1.1.0/code 6 APK is 66,572 bytes with SHA-256 `6b4302ee3220c25df5b40c3e7ff6d72d6c859b4403203f0577a01a9b7cc2ebf6`. Its upgrade certificate SHA-256 is `4b9b57d5eb49024959ea6eb2f87e2cc41a1a1db128ab8b58070b3ddfbefc9d27`. See [verification](VERIFICATION.md) for completed coverage, native evidence and remaining limits.
+The 1.1.0/code 6 APK is 66,572 bytes with SHA-256 `6b4302ee3220c25df5b40c3e7ff6d72d6c859b4403203f0577a01a9b7cc2ebf6`. Its upgrade certificate SHA-256 is `4b9b57d5eb49024959ea6eb2f87e2cc41a1a1db128ab8b58070b3ddfbefc9d27`. See [verification](https://github.com/jeremykenedy/contour-flow/blob/v1.1.0/docs/VERIFICATION.md) for completed coverage, native evidence and remaining limits.
